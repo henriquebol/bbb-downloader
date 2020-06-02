@@ -4,9 +4,9 @@
   "description": "Docker - Recorder and downloader of bigbluebutton web conferences.",
   "author": "Henrique Lima <henbolima@gmail.com>",
   "license": "MIT",
-  "main": "app.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "dev:server": "nodemon src/index.js"
   },
   "keywords": [
     "docker",
@@ -16,9 +16,9 @@
     "screencast"
   ],
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.16.4",
-    "nodemon": "^2.0.3",
-    "osmosis": "^1.1.10",
+    "nodemailer": "^6.4.8",
     "puppeteer": "^2.1.1",
     "ws": "^7.2.3",
     "xvfb": "^0.3.0"
@@ -26,5 +26,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/henriquebol/bbb-downloader"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "sucrase": "^3.15.0"
   }
 }

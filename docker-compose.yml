@@ -3,11 +3,14 @@ version: "3"
 services: 
     app:
         build: .
+        image: bbb-downloader
+        container_name: bbb-downloader-app
+        restart: always
+        env_file: .env
         ports:
             - "8080:8080"
         command: yarn start
         volumes:
             - .:/usr/app
-    #postgres:
     #redis:
 

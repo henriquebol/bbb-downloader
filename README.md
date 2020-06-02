@@ -26,4 +26,4 @@ When you will run the command that time `chromium` browser will be open in backg
 **Note: It will use extra CPU to process chrome & ffmpeg.** 
 
 
-Thanks to [@jibon57](https://github.com/jibon57/bbb-recorder) and[@muralikg](https://github.com/muralikg/puppetcam). Everything was copied from there & I did some adjustment and add in a docker container. 
+Thanks to [@jibon57](https://github.com/jibon57/bbb-recorder) and[@muralikg](https://github.com/muralikg/puppetcam). Lib was copied from there & I did some adjustment and add in a docker container. 

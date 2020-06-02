@@ -4,10 +4,10 @@ const fs = require('fs');
 const os = require('os');
 const homedir = os.homedir();
 const platform = os.platform();
-const config = JSON.parse(fs.readFileSync("config.json", 'utf8'));
 const spawn = require('child_process').spawn;
 
 var xvfb        = new Xvfb({
+    timeout: 10000, 
     silent: true,
     xvfb_args: ["-screen", "0", "1280x800x24", "-ac", "-nolisten", "tcp", "-dpi", "96", "+extension", "RANDR"]
 });
@@ -37,19 +37,21 @@ if(platform == "linux"){
     options.executablePath = "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 }
 
-async function main() {
+exports.startRecording = async (url) => {
+    console.log("Iniciando...");
     try{
         if(platform == "linux"){
-            xvfb.startSync()
+            await xvfb.startSync()
+
         }
         
-        var url = process.argv[2];
+        //var url = process.argv[2];
         if(!url){
             console.warn('URL undefined!');
             process.exit(1);
         }
         // Verify if recording URL has the correct format
-        var urlRegex = new RegExp('^https?:\\/\\/.*\\/playback\\/presentation\\/2\\.0\\/' + config.playbackFile + '\\?meetingId=[a-z0-9]{40}-[0-9]{13}');
+        var urlRegex = new RegExp('^https?:\\/\\/.*\\/playback\\/presentation\\/2\\.0\\/' + 'playback\\.html' + '\\?meetingId=[a-z0-9]{40}-[0-9]{13}');
         if(!urlRegex.test(url)){
             console.warn('Invalid recording URL!');
             process.exit(1);
@@ -121,6 +123,8 @@ async function main() {
         await page.$eval('.acorn-controls', element => element.style.opacity = "0");
         await page.click('button[class=acorn-play-button]', {waitUntil: 'domcontentloaded'});
 
+        console.log("Iniciando gravação")
+
         await page.evaluate((x) => {
             console.log("REC_START");
             window.postMessage({type: 'REC_START'}, '*')
@@ -143,92 +147,70 @@ async function main() {
             xvfb.stopSync()
         }
 
-        if(convert){
-            convertAndCopy(exportname)
-        }else{
-            copyOnly(exportname)
-        }
+        //convertAndCopy(exportname)
+        console.log("Fim da gravação")
+        return exportname
 
     }catch(err) {
         console.log(err)
     }
 }
 
-main()
+exports.convertAndCopy = (filename) => {
 
-function convertAndCopy(filename){
- 
-    var copyFromPath = homedir + "/Downloads";
-    var copyToPath = config.copyToPath;
-    var onlyfileName = filename.split(".webm")
-    var mp4File = onlyfileName[0] + ".mp4"
-    var copyFrom = copyFromPath + "/" + filename + ""
-    var copyTo = copyToPath + "/" + mp4File;
-
-    if(!fs.existsSync(copyToPath)){
-        fs.mkdirSync(copyToPath);
-    }
-
-    console.log(copyTo);
-    console.log(copyFrom);
+    return new Promise(function (resolve, reject) {
+        var copyFromPath = homedir + "/Downloads";
+        var copyToPath = process.env.COPY_TO_PATH;
+        var onlyfileName = filename.split(".webm")
+        var mp4File = onlyfileName[0] + ".mp4"
+        var copyFrom = copyFromPath + "/" + filename + ""
+        var copyTo = copyToPath + "/" + mp4File;
     
-    const ls = spawn('ffmpeg',
-        [   '-y',
-            '-i "' + copyFrom + '"',
-            '-c:v libx264',
-            '-preset veryfast',
-            '-movflags faststart',
-            '-profile:v high',
-            '-level 4.2',
-            '-max_muxing_queue_size 9999',
-            '-vf mpdecimate',
-            '-vsync vfr "' + copyTo + '"'
-        ],
-        {
-            shell: true
+        if(!fs.existsSync(copyToPath)){
+            fs.mkdirSync(copyToPath);
         }
-
-    );
-
-    ls.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
+    
+        console.log(`Iniciando conversão. De ${copyFrom} para ${copyTo}`);
+        
+        const ls = spawn('ffmpeg',
+            [   '-y',
+                '-i "' + copyFrom + '"',
+                '-c:v libx264',
+                '-preset veryfast',
+                '-movflags faststart',
+                '-profile:v high',
+                '-level 4.2',
+                '-max_muxing_queue_size 9999',
+                '-vf mpdecimate',
+                '-vsync vfr "' + copyTo + '"'
+            ],
+            {
+                shell: true
+            }
+    
+        );
+    
+        ls.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        });
+    
+        ls.stderr.on('data', (data) => {
+            //console.error(`stderr: ${data}`);
+            //reject(data);
+        });
+    
+        ls.on('close', (code) => {
+            //console.log(`child process exited with code ${code}`);
+            if(code == 0)
+            {
+                console.log("Convertion done to here: " + copyTo)
+                fs.unlinkSync(copyFrom);
+                console.log('successfully deleted ' + copyFrom);
+                resolve(copyTo);
+            }
+            else { reject(code) }
+           
+        });
     });
 
-    ls.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
-
-    ls.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-        if(code == 0)
-        {
-            console.log("Convertion done to here: " + copyTo)
-            fs.unlinkSync(copyFrom);
-            console.log('successfully deleted ' + copyFrom);
-        }
-       
-    });
-
-}
-
-function copyOnly(filename){
-
-    var copyFrom = homedir + "/Downloads/" + filename;
-    var copyToPath = config.copyToPath;
-    var copyTo = copyToPath + "/" + filename;
-
-    if(!fs.existsSync(copyToPath)){
-        fs.mkdirSync(copyToPath);
-    }
-
-    try {
-
-        fs.copyFileSync(copyFrom, copyTo)
-        console.log('successfully copied ' + copyTo);
-
-        fs.unlinkSync(copyFrom);
-        console.log('successfully delete ' + copyFrom);
-    } catch (err) {
-        console.log(err)
-    }
 }
