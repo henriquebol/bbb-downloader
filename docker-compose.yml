@@ -9,8 +9,34 @@ services:
         env_file: .env
         ports:
             - "8080:8080"
-        command: yarn start
+        command: yarn start:server
         volumes:
             - .:/usr/app
-    #redis:
+        links:
+            - redis_queue
+        environment:
+            - REDIS_QUEUE_URL=redis://redis_queue:6378
+    queue:
+        build: .
+        image: bbb-downloader
+        container_name: bbb-downloader-queue
+        env_file: .env
+        environment:
+            - REDIS_QUEUE_URL=redis://redis_queue:6378
+        command: "yarn start:queue"
+        volumes:
+            - .:/usr/app
+        links:
+            - redis_queue
+    redis_queue:
+        image: redis:alpine
+        restart: unless-stopped
+        container_name: redis_queue
+        command: redis-server --appendonly yes --port 6378
+        ports:
+            - "6378:6378"
+        expose:
+            - "6378"
+        volumes:
+            - ./redis-data:/data
 

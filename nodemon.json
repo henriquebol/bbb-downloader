@@ -1,5 +1,7 @@
 {
     "execMap": {
         "js": "sucrase-node"
-    }
+    },
+    "ignore": ["./build/*"]
+
 }

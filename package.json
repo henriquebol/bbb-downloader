@@ -4,9 +4,17 @@
   "description": "Docker - Recorder and downloader of bigbluebutton web conferences.",
   "author": "Henrique Lima <henbolima@gmail.com>",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
-    "dev:server": "nodemon src/index.js"
+    "dev:server": "nodemon src/index.js",
+    "dev:queue": "nodemon src/queue.js",
+    "dev": "npm-run-all -p dev:*",
+    "build": "rm -r ./build && sucrase ./src -d ./build --transforms imports && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/",
+    "start:server": "node build/index.js",
+    "start:queue": "node build/queue.js",
+    "start": "npm-run-all -p start:*",
+    "debug:server": "DEBUG=puppeteer:* node src/index.js",
+    "debug:queue": "DEBUG=puppeteer:* node src/queue.js"
   },
   "keywords": [
     "docker",
@@ -16,10 +24,17 @@
     "screencast"
   ],
   "dependencies": {
+    "await-spawn": "^3.0.0",
+    "bull": "^3.14.0",
+    "bull-board": "^0.8.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
+    "jszip": "^3.5.0",
     "nodemailer": "^6.4.8",
+    "npm-run-all": "^4.1.5",
+    "pino": "^6.3.2",
     "puppeteer": "^2.1.1",
+    "simple-node-logger": "^18.12.24",
     "ws": "^7.2.3",
     "xvfb": "^0.3.0"
   },
@@ -28,6 +43,9 @@
     "url": "https://github.com/henriquebol/bbb-downloader"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
     "nodemon": "^2.0.4",
     "sucrase": "^3.15.0"
   }
