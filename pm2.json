@@ -1,0 +1,9 @@
+{
+    "apps" : [{
+      "name"        : "api",
+      "script"      : "build/index.js",
+    },{
+      "name"       : "queue",
+      "script"     : "build/queue.js",
+    }]
+  }
