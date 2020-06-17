@@ -1,8 +1,7 @@
 import { access, F_OK } from 'fs';
 import Queue from '../lib/Queue';
 
-const log = require('simple-node-logger').createSimpleLogger('default.log');
-
+const log = require('simple-node-logger').createSimpleLogger('api.log');
 
 export default {
   async store(req, res) {

@@ -1,9 +1,14 @@
 {
     "apps" : [{
       "name"        : "api",
-      "script"      : "build/index.js",
+      "script"      : "NODE_ENV=production build/index.js",
     },{
-      "name"       : "queue",
-      "script"     : "build/queue.js",
+      "name"       : "day_queue",
+      "script"     : "NODE_ENV=production build/queue.js",
     }]
   }
+
+  // npm install pm2 -g
+  // crontab -e
+  // 0 0 * * * NODE_ENV=production pm2 start /home/root/bbb-downloader/build/queue.js --name "vampire_queue" -i 0 -- 3
+  // 0 6 * * * pm2 stop vampire_queue

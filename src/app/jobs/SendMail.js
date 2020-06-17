@@ -1,6 +1,6 @@
 import Mail from '../lib/Mail';
 
-const log = require('simple-node-logger').createSimpleLogger('default.log');
+const log = require('simple-node-logger').createSimpleLogger('queue.log');
 
 export default {
   key: 'SendMail',

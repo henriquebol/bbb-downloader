@@ -1,7 +1,7 @@
 import { startRecording, convertAndCopy } from '../lib/bbb-recorder/recorder';
 import Queue from '../lib/Queue';
 
-const log = require('simple-node-logger').createSimpleLogger('default.log');
+const log = require('simple-node-logger').createSimpleLogger('queue.log');
 
 export default {
   key: 'ConvertWeb',

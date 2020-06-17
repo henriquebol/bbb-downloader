@@ -20,9 +20,9 @@ export default {
 
     return queue.bull.add(data, queue.options);
   },
-  process() {
+  process(concurrency = 1) {
     return this.queues.forEach((queue) => {
-      queue.bull.process(queue.handle);
+      queue.bull.process(concurrency, queue.handle);
 
       queue.bull.on('failed', (job, err) => {
         console.log('Job failed', queue.key, job.data);
