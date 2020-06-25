@@ -1,5 +1,4 @@
 import Queue from 'bull';
-
 import * as jobs from '../jobs';
 
 const queues = Object.values(jobs).map((job) => ({

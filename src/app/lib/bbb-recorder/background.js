@@ -89,12 +89,12 @@ chrome.runtime.onConnect.addListener((port) => {
               });
 
               const url = URL.createObjectURL(superBuffer);
-              const a = document.createElement('a');
-              document.body.appendChild(a);
-              a.style = 'display: none';
-              a.href = url;
-              a.download = 'test.webm';
-              a.click();
+              // const a = document.createElement('a');
+              // document.body.appendChild(a);
+              // a.style = 'display: none';
+              // a.href = url;
+              // a.download = 'test.webm';
+              // a.click();
 
               chrome.downloads.download({
                 url,

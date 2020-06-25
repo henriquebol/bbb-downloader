@@ -9,7 +9,7 @@ _bullboard2.default.setQueues(_Queue2.default.queues.map((queue) => queue.bull))
 
 app.use(_express2.default.json());
 
-app.get('/api/download/', _RequestController2.default.store);
-app.use('/api/queues', _bullboard2.default.UI);
+app.get('/', _RequestController2.default.store);
+app.use('/dashboard', _bullboard2.default.UI);
 
 app.listen(process.env.PORT, process.env.HOST);

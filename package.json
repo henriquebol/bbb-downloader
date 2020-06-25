@@ -9,12 +9,13 @@
     "dev:server": "nodemon src/index.js",
     "dev:queue": "nodemon src/queue.js",
     "dev": "npm-run-all -p dev:*",
-    "build": "rm -r ./build && sucrase ./src -d ./build --transforms imports && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/",
-    "start:server": "node build/index.js",
-    "start:queue": "node build/queue.js",
+    "build:linux": "rm -r ./build && sucrase ./src -d ./build --transforms imports && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/",
+    "build:win": "rmdir build /S/Q && sucrase ./src -d ./build --transforms imports && xcopy \"src/app/lib/bbb-recorder\" \"build/app/lib/bbb-recorder\" /S/Y/I",
+    "start:server": "NODE_ENV=production nodemon build/index.js",
+    "start:queue": "NODE_ENV=production nodemon build/queue.js",
     "start": "npm-run-all -p start:*",
-    "debug:server": "DEBUG=puppeteer:* node src/index.js",
-    "debug:queue": "DEBUG=puppeteer:* node src/queue.js"
+    "debug:server": "DEBUG=puppeteer:* nodemon src/index.js",
+    "debug:queue": "DEBUG=puppeteer:* nodemon src/queue.js"
   },
   "keywords": [
     "docker",
@@ -28,6 +29,8 @@
     "bull-board": "^0.8.0",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
+    "fast-xml-parser": "^3.17.4",
+    "node-fetch": "^2.6.0",
     "nodemailer": "^6.4.8",
     "npm-run-all": "^4.1.5",
     "puppeteer": "^2.1.1",

@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _recorder = require('../lib/bbb-recorder/recorder');
 var _Queue = require('../lib/Queue'); var _Queue2 = _interopRequireDefault(_Queue);
 
-const log = require('simple-node-logger').createSimpleLogger('default.log');
+const log = require('simple-node-logger').createSimpleLogger('log/queue.log');
 
 exports. default = {
   key: 'ConvertWeb',
@@ -11,7 +11,7 @@ exports. default = {
   async handle({ data }) {
     const { request } = data;
 
-    log.info('Start Recording - ', request.url);
+    log.info('Starting Recording - ', request.url);
     await _recorder.startRecording.call(void 0, request.url)
       .then(async (exportname) => {
         log.info('Convert And Copy - ', request.url);

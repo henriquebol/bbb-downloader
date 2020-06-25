@@ -9,7 +9,7 @@ BullBoard.setQueues(Queue.queues.map((queue) => queue.bull));
 
 app.use(express.json());
 
-app.get('/api/download/', RequestController.store);
-app.use('/api/queues', BullBoard.UI);
+app.get('/', RequestController.store);
+app.use('/dashboard', BullBoard.UI);
 
 app.listen(process.env.PORT, process.env.HOST);

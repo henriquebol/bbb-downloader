@@ -4,5 +4,10 @@ npm-debug.log
 Dockerfile
 record/
 redis-data/
+redis-data/*
+/log
 .dockerignore
 .vscode
+package-lock.json
+yarn.lock
+yarn-error.log

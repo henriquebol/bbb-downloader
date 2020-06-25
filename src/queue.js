@@ -1,9 +1,11 @@
 import 'dotenv/config';
 import Queue from './app/lib/Queue';
 
-const log = require('simple-node-logger').createSimpleLogger('queue.log');
+const log = require('simple-node-logger').createSimpleLogger('log/queue.log');
 
-const concurrency = process.argv[0] || 1;
+const args = process.argv.slice(2);
+
+const concurrency = args[0] || 1;
 
 log.info('Starting queue whith concurrency: ', concurrency);
 Queue.process(concurrency);

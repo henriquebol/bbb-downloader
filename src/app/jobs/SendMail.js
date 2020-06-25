@@ -1,6 +1,6 @@
 import Mail from '../lib/Mail';
 
-const log = require('simple-node-logger').createSimpleLogger('queue.log');
+const log = require('simple-node-logger').createSimpleLogger('log/queue.log');
 
 export default {
   key: 'SendMail',
@@ -16,7 +16,7 @@ export default {
       from: 'Suporte <webconferencia.virtual.ufc.br>',
       to: request.email,
       subject: 'Download da webconferência',
-      html: `Olá. Conforme solicitado, segue o link de download da sua webconferência. <a>${request.path_file}<a>.`,
+      html: `Olá. Conforme solicitado, segue o link de download da sua webconferência. <a>${request.path_download}<a>.`,
     });
   },
 };

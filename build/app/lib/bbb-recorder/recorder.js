@@ -1,5 +1,3 @@
-const JSZip = require('jszip');
-
 const puppeteer = require('puppeteer');
 const Xvfb = require('xvfb');
 const fs = require('fs');
@@ -84,7 +82,6 @@ exports.startRecording = async (url) => {
       process.exit(1);
     }
 
-    // console.log('Statrting puppeteer');
     const browser = await puppeteer.launch(options);
     const pages = await browser.pages();
 
@@ -92,7 +89,7 @@ exports.startRecording = async (url) => {
 
     page.on('console', (msg) => {
       const m = msg.text();
-      // console.log('PAGE LOG:', m); // uncomment if you need
+      console.log('PAGE LOG:', m); // uncomment if you need
     });
 
     await page._client.send('Emulation.clearDeviceMetricsOverride');
@@ -123,31 +120,27 @@ exports.startRecording = async (url) => {
     await page.$eval('.acorn-controls', (element) => element.style.opacity = '0');
     await page.click('button[class=acorn-play-button]', { waitUntil: 'domcontentloaded' });
 
-    // console.log('Preparing record');
-
     await page.evaluate((x) => {
-      // console.log('REC_START');
       window.postMessage({ type: 'REC_START' }, '*');
     });
-    // console.log('Recording');
+
     // Perform any actions that have to be captured in the exported video
     await page.waitFor((duration * 1000));
-    // console.log('End of recording');
+
     await page.evaluate((filename) => {
       window.postMessage({ type: 'SET_EXPORT_PATH', filename }, '*');
       window.postMessage({ type: 'REC_STOP' }, '*');
     }, exportname);
 
-    // console.log('Wait for download of webm to complete');
-    try {
-      await page.waitForSelector('html.downloadComplete', { timeout: 60000 });
-    } catch (err) {
-      throw new Error(400);
-    }
+    // try {
+    await page.waitForSelector('html.downloadComplete', { timeout: 0 });
+    // } catch (err) {
+    //   throw new Error(400);
+    // }
 
     await page.close();
     await browser.close();
-    // console.log('Finishing...');
+
     if (platform == 'linux') {
       xvfb.stopSync();
     }
@@ -170,8 +163,6 @@ exports.convertAndCopy = async (filename) => {
   if (!fs.existsSync(copyToPath)) {
     fs.mkdirSync(copyToPath);
   }
-
-  console.log('Starting conversion');
 
   const ls = spawn('ffmpeg',
     ['-y',

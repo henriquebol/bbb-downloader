@@ -1,33 +1,37 @@
 version: "3"
 
 services: 
-    app:
-        build: .
-        image: bbb-downloader
-        container_name: bbb-downloader-app
-        restart: always
-        env_file: .env
-        ports:
-            - "8080:8080"
-        command: yarn start:server
-        volumes:
-            - .:/usr/app
-        links:
-            - redis_queue
-        environment:
-            - REDIS_QUEUE_URL=redis://redis_queue:6378
-    queue:
-        build: .
-        image: bbb-downloader
-        container_name: bbb-downloader-queue
-        env_file: .env
-        environment:
-            - REDIS_QUEUE_URL=redis://redis_queue:6378
-        command: "yarn start:queue"
-        volumes:
-            - .:/usr/app
-        links:
-            - redis_queue
+    # app:
+    #     build: .
+    #     image: bbb-downloader
+    #     container_name: bbb-downloader-app
+    #     restart: always
+    #     env_file: .env
+    #     ports:
+    #         - "8080:8080"
+    #     command: yarn start:server
+    #     volumes:
+    #         - .:/usr/app
+    #         - ./log/:/log
+    #         #- ${SCALELITE_RECORDING_DIR}/published/download:/var/bigbluebutton/published/download
+    #     links:
+    #         - redis_queue
+    #     environment:
+    #         - REDIS_QUEUE_URL=redis://redis_queue:6378
+    # queue:
+    #     build: .
+    #     image: bbb-downloader
+    #     container_name: bbb-downloader-queue
+    #     env_file: .env
+    #     environment:
+    #         - REDIS_QUEUE_URL=redis://redis_queue:6378
+    #     command: "yarn start:queue"
+    #     volumes:
+    #         - .:/usr/app
+    #         - ./log/:/log
+    #         - ./files:/var/bigbluebutton/published/download
+    #     links:
+    #         - redis_queue
     redis_queue:
         image: redis:alpine
         restart: unless-stopped
