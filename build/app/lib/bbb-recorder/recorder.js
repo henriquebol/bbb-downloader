@@ -132,11 +132,11 @@ exports.startRecording = async (url) => {
       window.postMessage({ type: 'REC_STOP' }, '*');
     }, exportname);
 
-    // try {
-    await page.waitForSelector('html.downloadComplete', { timeout: 300000 });
-    // } catch (err) {
-    //   throw new Error(400);
-    // }
+    try {
+      await page.waitForSelector('html.downloadComplete', { timeout: 300000 });
+    } catch (err) {
+      throw new Error(400);
+    }
 
     await page.close();
     await browser.close();

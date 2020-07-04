@@ -22,8 +22,15 @@ export default {
         Queue.add('SendMail', { request });
       })
       .catch((e) => {
-        Queue.add('ConvertWeb', { request });
-        log.error(e);
+        console.log('RETRY -> request', request);
+        Queue.get('ConvertWeb', request.meetingId).then((response) => {
+          log.info('Remove Job - ', request.url);
+          response.remove().then(() => {
+            log.info('Add ConvertWeb Queue - ', request.url);
+            Queue.add('ConvertWeb', { request });
+            log.error(e);
+          });
+        });
       });
   },
 };

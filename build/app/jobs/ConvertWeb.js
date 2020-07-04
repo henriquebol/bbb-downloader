@@ -61,11 +61,20 @@ var _default = {
                   request: request
                 });
               })["catch"](function (e) {
-                _Queue["default"].add('ConvertWeb', {
-                  request: request
-                });
+                console.log('RETRY -> request', request);
 
-                log.error(e);
+                _Queue["default"].get('ConvertWeb', request.meetingId).then(function (response) {
+                  log.info('Remove Job - ', request.url);
+                  response.remove().then(function () {
+                    log.info('Add ConvertWeb Queue - ', request.url);
+
+                    _Queue["default"].add('ConvertWeb', {
+                      request: request
+                    });
+
+                    log.error(e);
+                  });
+                });
               });
 
             case 5:
