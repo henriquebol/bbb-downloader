@@ -5,6 +5,7 @@ import checkPermission from './PermissionController';
 const log = require('simple-node-logger').createSimpleLogger('log/api.log');
 
 export default {
+
   async store(req, res) {
     // const { url, email } = req.body;
     const { user } = req.query;
@@ -35,6 +36,7 @@ export default {
       email,
       url,
       path_download,
+      meetingId,
     };
 
     checkPermission(metadata, user).then((r) => {
@@ -68,5 +70,11 @@ export default {
         return res.json({ msg: path_download });
       });
     });
+  },
+
+  async clean(req, res) {
+    await Queue.clean('ConvertWeb');
+    await Queue.clean('SendMail');
+    return res.json({ msg: 'Limpo!' });
   },
 };

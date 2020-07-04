@@ -5,6 +5,7 @@ var _PermissionController = require('./PermissionController'); var _PermissionCo
 const log = require('simple-node-logger').createSimpleLogger('log/api.log');
 
 exports. default = {
+
   async store(req, res) {
     // const { url, email } = req.body;
     const { user } = req.query;
@@ -35,6 +36,7 @@ exports. default = {
       email,
       url,
       path_download,
+      meetingId,
     };
 
     _PermissionController2.default.call(void 0, metadata, user).then((r) => {
@@ -68,5 +70,11 @@ exports. default = {
         return res.json({ msg: path_download });
       });
     });
+  },
+
+  async clean(req, res) {
+    await _Queue2.default.clean('ConvertWeb');
+    await _Queue2.default.clean('SendMail');
+    return res.json({ msg: 'Limpo!' });
   },
 };

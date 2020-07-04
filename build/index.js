@@ -10,6 +10,7 @@ _bullboard2.default.setQueues(_Queue2.default.queues.map((queue) => queue.bull))
 app.use(_express2.default.json());
 
 app.get('/', _RequestController2.default.store);
+app.get('/clean', _RequestController2.default.clean);
 app.use('/dashboard', _bullboard2.default.UI);
 
 app.listen(process.env.PORT, process.env.HOST);
