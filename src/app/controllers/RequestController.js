@@ -12,8 +12,6 @@ export default {
     const { email } = req.query || 'webconferencia@virtual.ufc.br';
     const { url } = req.query;
 
-    const msg = '';
-
     log.info('New Request - ', user, ' - ', email, ' - ', url);
 
     if (!url) {

@@ -1,26 +1,80 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var _recorder = require('../lib/bbb-recorder/recorder');
-var _Queue = require('../lib/Queue'); var _Queue2 = _interopRequireDefault(_Queue);
+"use strict";
 
-const log = require('simple-node-logger').createSimpleLogger('log/queue.log');
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-exports. default = {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+var _recorder = require("../lib/bbb-recorder/recorder");
+
+var _Queue = _interopRequireDefault(require("../lib/Queue"));
+
+var log = require('simple-node-logger').createSimpleLogger('log/queue.log');
+
+var _default = {
   key: 'ConvertWeb',
   options: {
-    attempts: 3,
+    attempts: 3
   },
-  async handle({ data }) {
-    const { request } = data;
+  handle: function handle(_ref) {
+    return (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+      var data, request;
+      return _regenerator["default"].wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              data = _ref.data;
+              request = data.request;
+              log.info('Starting Recording - ', request.url);
+              _context2.next = 5;
+              return (0, _recorder.startRecording)(request.url).then( /*#__PURE__*/function () {
+                var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(exportname) {
+                  return _regenerator["default"].wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          log.info('Convert And Copy - ', request.url);
+                          _context.next = 3;
+                          return (0, _recorder.convertAndCopy)(exportname);
 
-    log.info('Starting Recording - ', request.url);
-    await _recorder.startRecording.call(void 0, request.url)
-      .then(async (exportname) => {
-        log.info('Convert And Copy - ', request.url);
-        await _recorder.convertAndCopy.call(void 0, exportname);
-      })
-      .then(() => {
-        log.info('Send Mail - ', request.url);
-        _Queue2.default.add('SendMail', { request });
-      })
-      .catch((e) => log.error(e));
-  },
+                        case 3:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x) {
+                  return _ref2.apply(this, arguments);
+                };
+              }()).then(function () {
+                log.info('Send Mail - ', request.url);
+
+                _Queue["default"].add('SendMail', {
+                  request: request
+                });
+              })["catch"](function (e) {
+                _Queue["default"].add('ConvertWeb', {
+                  request: request
+                });
+
+                log.error(e);
+              });
+
+            case 5:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }))();
+  }
 };
+exports["default"] = _default;

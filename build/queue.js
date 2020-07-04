@@ -1,11 +1,15 @@
-"use strict"; function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }require('dotenv/config');
-var _Queue = require('./app/lib/Queue'); var _Queue2 = _interopRequireDefault(_Queue);
+"use strict";
 
-const log = require('simple-node-logger').createSimpleLogger('log/queue.log');
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-const args = process.argv.slice(2);
+require("dotenv/config");
 
-const concurrency = args[0] || 1;
+var _Queue = _interopRequireDefault(require("./app/lib/Queue"));
 
+var log = require('simple-node-logger').createSimpleLogger('log/queue.log');
+
+var args = process.argv.slice(2);
+var concurrency = args[0] || 1;
 log.info('Starting queue whith concurrency: ', concurrency);
-_Queue2.default.process(concurrency);
+
+_Queue["default"].process(concurrency);

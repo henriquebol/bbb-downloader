@@ -1,16 +1,25 @@
-"use strict"; function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }require('dotenv/config');
-var _express = require('express'); var _express2 = _interopRequireDefault(_express);
-var _bullboard = require('bull-board'); var _bullboard2 = _interopRequireDefault(_bullboard);
-var _RequestController = require('./app/controllers/RequestController'); var _RequestController2 = _interopRequireDefault(_RequestController);
-var _Queue = require('./app/lib/Queue'); var _Queue2 = _interopRequireDefault(_Queue);
+"use strict";
 
-const app = _express2.default.call(void 0, );
-_bullboard2.default.setQueues(_Queue2.default.queues.map((queue) => queue.bull));
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-app.use(_express2.default.json());
+require("dotenv/config");
 
-app.get('/', _RequestController2.default.store);
-app.get('/clean', _RequestController2.default.clean);
-app.use('/dashboard', _bullboard2.default.UI);
+var _express = _interopRequireDefault(require("express"));
 
+var _bullBoard = _interopRequireDefault(require("bull-board"));
+
+var _RequestController = _interopRequireDefault(require("./app/controllers/RequestController"));
+
+var _Queue = _interopRequireDefault(require("./app/lib/Queue"));
+
+var app = (0, _express["default"])();
+
+_bullBoard["default"].setQueues(_Queue["default"].queues.map(function (queue) {
+  return queue.bull;
+}));
+
+app.use(_express["default"].json());
+app.get('/', _RequestController["default"].store);
+app.get('/clean', _RequestController["default"].clean);
+app.use('/dashboard', _bullBoard["default"].UI);
 app.listen(process.env.PORT, process.env.HOST);

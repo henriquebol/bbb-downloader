@@ -133,7 +133,7 @@ exports.startRecording = async (url) => {
     }, exportname);
 
     // try {
-    await page.waitForSelector('html.downloadComplete', { timeout: 3600000 });
+    await page.waitForSelector('html.downloadComplete', { timeout: 300000 });
     // } catch (err) {
     //   throw new Error(400);
     // }

@@ -9,10 +9,10 @@
     "dev:server": "nodemon src/index.js",
     "dev:queue": "nodemon src/queue.js",
     "dev": "npm-run-all -p dev:*",
-    "build:linux": "rm -r ./build && sucrase ./src -d ./build --transforms imports && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/",
+    "build:linux": "rm -r ./build && babel src --out-dir build && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/",
     "build:win": "rmdir build /S/Q && sucrase ./src -d ./build --transforms imports && xcopy \"src/app/lib/bbb-recorder\" \"build/app/lib/bbb-recorder\" /S/Y/I",
-    "start:server": "NODE_ENV=production nodemon build/index.js",
-    "start:queue": "NODE_ENV=production nodemon build/queue.js",
+    "start:server": "NODE_ENV=production node build/index.js",
+    "start:queue": "NODE_ENV=production node build/queue.js",
     "start": "npm-run-all -p start:*",
     "debug:server": "DEBUG=puppeteer:* nodemon src/index.js",
     "debug:queue": "DEBUG=puppeteer:* nodemon src/queue.js"
@@ -25,6 +25,7 @@
     "screencast"
   ],
   "dependencies": {
+    "@babel/cli": "^7.10.4",
     "bull": "^3.14.0",
     "bull-board": "^0.8.0",
     "dotenv": "^8.2.0",
@@ -43,6 +44,11 @@
     "url": "https://github.com/henriquebol/bbb-downloader"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-transform-runtime": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",

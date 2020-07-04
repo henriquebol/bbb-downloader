@@ -21,6 +21,9 @@ export default {
         log.info('Send Mail - ', request.url);
         Queue.add('SendMail', { request });
       })
-      .catch((e) => log.error(e));
+      .catch((e) => {
+        Queue.add('ConvertWeb', { request });
+        log.error(e);
+      });
   },
 };
