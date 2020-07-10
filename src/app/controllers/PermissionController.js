@@ -11,10 +11,12 @@ export default async function checkPermission(metadata, email) {
   await data.text().then((d) => {
     const json = parser.parse(d);
 
-    meta_download = json.recording.meta.download;
-    meta_email = json.recording.meta.email;
+    try {
+      meta_download = json.recording.meta.download;
+      meta_email = json.recording.meta.email;
 
-    if (meta_download === 'true' || (meta_email === email)) { resp = true; }
+      if (meta_download === 'true' || (meta_email === email)) { resp = true; }
+    } catch (e) { resp = false; }
   });
   return resp;
 }
