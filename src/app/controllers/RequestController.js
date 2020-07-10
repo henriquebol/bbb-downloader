@@ -8,11 +8,10 @@ export default {
 
   async store(req, res) {
     // const { url, email } = req.body;
-    const { user } = req.query;
     const { email } = req.query || 'webconferencia@virtual.ufc.br';
     const { url } = req.query;
 
-    log.info('New Request - ', user, ' - ', email, ' - ', url);
+    log.info('New Request - ', email, ' - ', url);
 
     if (!url) {
       return res.json({ msg: 'URL vazia' });
@@ -37,7 +36,7 @@ export default {
       meetingId,
     };
 
-    checkPermission(metadata, user).then((r) => {
+    checkPermission(metadata, email).then((r) => {
       if (!r) return res.json({ msg: 'Download não permitido. Por favor, contate o responsável pela gravação para mais informações' });
 
       access(path_file, F_OK, (err) => {

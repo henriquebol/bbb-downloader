@@ -9,7 +9,7 @@
     "dev:server": "nodemon src/index.js",
     "dev:queue": "nodemon src/queue.js",
     "dev": "npm-run-all -p dev:*",
-    "build:linux": "babel src --out-dir build && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/",
+    "build:linux": "babel src --out-dir build && cp -r ./src/app/lib/bbb-recorder ./build/app/lib/ && sudo chmod -R 775 ~/bbb-downloader/",
     "build:win": "rmdir build /S/Q && sucrase ./src -d ./build --transforms imports && xcopy \"src/app/lib/bbb-recorder\" \"build/app/lib/bbb-recorder\" /S/Y/I",
     "start:server": "NODE_ENV=production node build/index.js",
     "start:queue": "NODE_ENV=production node build/queue.js",

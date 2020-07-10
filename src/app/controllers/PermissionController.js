@@ -1,9 +1,9 @@
 import parser from 'fast-xml-parser';
 import fetch from 'node-fetch';
 
-export default async function checkPermission(metadata, user) {
-  let download = '';
-  let moderator = '';
+export default async function checkPermission(metadata, email) {
+  let meta_download = '';
+  let meta_email = '';
   let resp = false;
 
   const data = await fetch(metadata);
@@ -11,22 +11,10 @@ export default async function checkPermission(metadata, user) {
   await data.text().then((d) => {
     const json = parser.parse(d);
 
-    download = json.recording.meta.download;
-    moderator = json.recording.meta.moderator;
+    meta_download = json.recording.meta.download;
+    meta_email = json.recording.meta.email;
 
-    switch (download) {
-      case 'false':
-        resp = false;
-        break;
-      case 'all':
-        resp = true;
-        break;
-      case 'moderator':
-        if (moderator === user) { resp = true; }
-        break;
-      default:
-        resp = true;
-    }
+    if (meta_download === 'true' || (meta_email === email)) { resp = true; }
   });
   return resp;
 }
