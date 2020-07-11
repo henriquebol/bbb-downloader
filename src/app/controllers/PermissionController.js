@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 export default async function checkPermission(metadata, email) {
   let meta_download = '';
   let meta_email = '';
-  let resp = false;
+  let resp = true;
 
   const data = await fetch(metadata);
 

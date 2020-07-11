@@ -6,7 +6,7 @@ const log = require('simple-node-logger').createSimpleLogger('log/queue.log');
 
 const args = process.argv.slice(2);
 
-const concurrency = args[0] || process.env.QUEUE_CONCURRENCY;
+const concurrency = args[0] || 8;
 
 log.info('Starting queue whith concurrency: ', concurrency);
 Queue.process(concurrency);
