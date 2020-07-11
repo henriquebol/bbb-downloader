@@ -24,7 +24,7 @@ begin
   if (permit_download.to_s == "true")
     host = meeting_metadata["bbb-origin-server-name"].value
     email = meeting_metadata["email"].value
-    address = 'http://grav-webconf.virtual.ufc.br?'
+    address = ''
     url = 'https://' + host + '/playback/presentation/2.0/playback.html?meetingId=' + meeting_id
     resp = RestClient.get "#{address}email=#{email}&url=#{url}"
     BigBlueButton.logger.info("#{address}email=#{email}&url=#{url}")
